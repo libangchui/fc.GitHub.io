@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>python + Mysql断连 | Gridea</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://lijunjie.me/favicon.ico?v=1653294061949">
+<link rel="stylesheet" href="https://lijunjie.me/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="python + Mysql断连
+前言：项目爬取南昌市政务服务网站事项信息，写入数据库，导致使用python链接mySQL时出现超时，断连问题。
+报错信息：
+Can't connect to MySQL server on '58.223...." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://lijunjie.me">
+        <img src="https://lijunjie.me/images/avatar.png?v=1653294061949" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://lijunjie.me/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">python + Mysql断连</h2>
+            <div class="post-date">2022-05-23</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="python-mysql断连">python + Mysql断连</h1>
+<p>前言：项目爬取南昌市政务服务网站事项信息，写入数据库，导致使用python链接mySQL时出现超时，断连问题。</p>
+<p><strong>报错信息：</strong></p>
+<pre><code class="language-python">Can't connect to MySQL server on '58.223.177.201' (timed out)
+</code></pre>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li>可能因为网络不稳定导致数据库断连</li>
+<li>给插入SQL添加 Try-Except</li>
+</ul>
+<hr>
+<pre><code class="language-python">def INSERT_SQL(sql_str):
+    db = pymysql.connect(host=&quot;xxxxxxxxx&quot;, port=8081, user=&quot;visitor&quot;, passwd=&quot;visitors@Zgy2021&quot;,
+                         db=&quot;ods_policy_rpa&quot;, charset='utf8')
+    cur = db.cursor()
+    xerr = &quot;&quot;
+    try:
+        cur.execute(sql_str)
+        db.commit()
+        print(&quot;提交成功！！！&quot;)
+    except Exception as e:
+        db.rollback()
+        print(e)
+        xerr =  e
+    cur.close()
+    db.close()
+    return xerr
+</code></pre>
+<p>给插入代码添加重连机制，断连后重新链接Mysql</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://lijunjie.me/post/second/">
+                  <h3 class="post-title">
+                    Second
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+
+  </body>
+</html>
